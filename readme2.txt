@@ -1,12 +1,15 @@
+##A couple of warnings: the matlab app designer interactions tools can be a bit buggy. They work pretty badly over a remote desktop connection. The program works best on the local computer. 
+These programs are memory hungry. If the files are too large or there are many images to map, the program will stall and start behaving in undesired ways.
+
 lmmalignapp.mlapp (run with no input arguments)
 
-1) A dialogue pops up to ask for the EM map file. choose this file. It should be a tif format. 
+1) A dialogue pops up to ask for the EM map file. choose this file. It should be a tif format. Bin the EM map to 10 MB or lower and save it as uint8 before use. 
 
-2) A dialogue pops up to ask for the fluorescence map file. This should also be a tif format. It can be grayscale 16 bit, 8 bit or rgb. I personally like to use an rgb file that shows all my channels. This is the most useful for good correlation. Please note that once you fine a good correlation, you will later be able to perform the same transformation on other files in bulk so you don't have to worry about this image being the image that you need for your final product. It should be the image that helps you correlate the best. 
+2) A dialogue pops up to ask for the fluorescence map file. This should also be a tif format. I use an rgb file that shows all my channels. This is the most useful for good correlation. Please note that once you find a good correlation, you will later be able to perform the same transformation on other files in bulk so you don't have to worry about this image being the image that you need for your final product. It should be the image that helps you correlate the best. However, the program will not allow you to perform a flip. So, the fluorescent images may need to be flipped to be in the the same flip orientation as the EM images. 
 
 3) Press the "rotate 90" button to rotate the fluorescence image 90 degrees CCW at a time so that it is aligned with your EM image a bit better. This button is a bit slow so each rotation may take a few seconds if you have a large file. 
 
-4) Zoom in or out or pan on each image using the panel that pops up in the right corner of each image. 
+4) Zoom in or out or pan on each image using the panel that pops up in the right corner of each image. Please note that if you try to pick landmarks while the zoom in or zoom out buttons are highlighted, the matlab gui will get confused and bug out. So make sure these buttons are not highlighted before selecting "EM pick" or "Fluor pick". 
 
 5) Look for landmarks that are visible in both the EM and fluorescence image. You should use five or more landmarks. It won't work at all if you use fewer than 3 but more is better. Also, it is better if they are spread out a bit. I frequently just use the grid squares as landmarks. If I can see the center of the grid, I pick a bunch of grid square corners that I can recognize in the two cases.  
 
@@ -18,11 +21,11 @@ lmmalignapp.mlapp (run with no input arguments)
 
 9) If you are happy with your selections, you press "submit". After a few seconds, the transformed image overlay will show up on the right axes. If the correlation is not even close, you may want to press "reset picks" and try again. 
 
-10) You now need to refine your correlation. Zoom in on your newly correlated overlay (using the tools that pop up on the upper right of the image). Go throughout your image correct the correlation by clicking "new gold" and clicking and dragging on the map from a landmark you see in the fluorescence to the same landmark that you see in the EM. Do this many times all over the map. This refinement is not using any of the information from your first image transformation so you will need to do this at least three times again but I suggest you do it 9-10 times all over your map. 
+10) You now need to refine your correlation. Zoom in on your newly correlated overlay (using the tools that pop up on the upper right of the image). Go throughout your image correct the correlation by clicking "new landmark" and clicking and dragging on the map from a landmark you see in the fluorescence to the same landmark that you see in the EM. Do this many times all over the map. This refinement is not using any of the information from your first image transformation so you will need to do this at least three times again but I suggest you do it 9-10 times all over your map. 
 
 11) Click "test" to use those landmarks to do an affine image transformation to your fluorescence image to get your images aligned. Your X and Y residuals for each fiducial will show up in column 1 and column 2 respectively. You may want to use these numbers to get rid of specific fiducials. Next to the "remove" button, the edit field will automatically fill with the number of the fiducial with the worst reisduals. You can also enter a number of your choosing there. If you press "remove", this fiducial will be removed from your fit and the transformation will be performed again. 
 
-12) You can still add more "new gold" after you have pressed "test" to improve the transformation more and more to get a closer fit. Please note that the image transformation being performed is always being calculated from the original image so you are not creating an increasingly more interpolated image, the more that you test different transformations. 
+12) You can still add more "new landmark" after you have pressed "test" to improve the transformation more and more to get a closer fit. Please note that the image transformation being performed is always being calculated from the original image so you are not creating an increasingly more interpolated image, the more that you test different transformations. 
 
 13) When you are happy with the transformation, click "transform". This will save the fluorescence file in a new file (in the same folder you got the image files from) that has a "_TT" appended to the filename. 
 
@@ -47,4 +50,5 @@ You probably want to bring the minumum fluorescence value up pretty high here so
 
 4) Once you have found the shift for all of the ROIs, click "export". This will save all of the cropped images (EM and fluorescence) with the alignment adjusted in the way that you chose. It will also ask if you would like to crop and translate other files. Here, you probably want to crop any of the additional channel files that you transformed in lmmalignapp. 
 
-Future: A final program will allow these images to automatically map to your higher resolution grid square maps. At this point, you can pick the exact locations for your tomograms and create a new SerialEM navigator file for importing into your SerialEM imaging session. 
+AutocorrMMM.mlapp
+This program is written to do the final high precision correlation to the MMM maps. It is hard-coded to work with the relative rotations and image sizes of our specific microscope. This program will not work well on data from other scopes unless relative rotations are optimized. 
