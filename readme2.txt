@@ -1,9 +1,11 @@
 ##A couple of warnings: the matlab app designer interactions tools can be a bit buggy. They work pretty badly over a remote desktop connection. The program works best on the local computer. 
 These programs are memory hungry. If the files are too large or there are many images to map, the program will stall and start behaving in undesired ways.
+If you intend to use all three programs for cryo mapping, your LMM maps should be acquired with binning to get you close to ~300 nm a pixel. This will be a good compromise between memory and visibility. If you are running into memory problems, you can bin after imaging but you will no longer easily be able to use the buttons that automatically create navigator files. 
+Kem A Sochacki 20241220
 
 lmmalignapp.mlapp (run with no input arguments)
 
-1) A dialogue pops up to ask for the EM map file. choose this file. It should be a tif format. Bin the EM map to 10 MB or lower and save it as uint8 before use. 
+1) A dialogue pops up to ask for the EM map file. choose this file. It should be a tif format. Save it as uint8 before use and consider binning options discussed above. An image that is too big will definitely cause memory hangups. 
 
 2) A dialogue pops up to ask for the fluorescence map file. This should also be a tif format. I use an rgb file that shows all my channels. This is the most useful for good correlation. Please note that once you find a good correlation, you will later be able to perform the same transformation on other files in bulk so you don't have to worry about this image being the image that you need for your final product. It should be the image that helps you correlate the best. However, the program will not allow you to perform a flip. So, the fluorescent images may need to be flipped to be in the the same flip orientation as the EM images. 
 
@@ -33,7 +35,7 @@ lmmalignapp.mlapp (run with no input arguments)
 
 15) If you would like to pick grid squares to make higher magnification maps in SerialEM, you can continue. If you just wanted to get your maps correlated, you can finish here. Your correlated images are saved.
 
-16) Click "pick MMM ROI", then click on the middle of a grid square that you would like to map. Do this on as many grid squares as you would like. You can remove these points if you make a mistake with the "MMMremove" button. It will remove whichever ROI is typed into the editable region next to it. 
+16) Click "pick MMM ROI", then click on the middle of a grid square that you would like to map. Do this on as many grid squares as you would like. You can remove these points if you make a mistake with the "MMMremove" button. It will remove whichever ROI is typed into the editable region next to it. You cannot pick squares near the edge of the image because the program will try to grab the square image surrounding the area when you go to the next step and it won't be able to. It will error out.
 
 17) When you are happy with your regions, and would like to create a Navigator file, Click "create MMM Nav". This will ask you for your existing Navigator file. So, it requires the Navigator file that you used when you acquired the grid map. Whatever grid map you used, it should be listed first in your Navigator file. The new Navigator file will just include the first "map" entry with the additional items that you just chose. When you import it into SerialEM, you can merge it with whatever Navigator file you are currently using. 
 
@@ -51,4 +53,4 @@ You probably want to bring the minumum fluorescence value up pretty high here so
 4) Once you have found the shift for all of the ROIs, click "export". This will save all of the cropped images (EM and fluorescence) with the alignment adjusted in the way that you chose. It will also ask if you would like to crop and translate other files. Here, you probably want to crop any of the additional channel files that you transformed in lmmalignapp. 
 
 AutocorrMMM.mlapp
-This program is written to do the final high precision correlation to the MMM maps. It is hard-coded to work with the relative rotations and image sizes of our specific microscope. This program will not work well on data from other scopes unless relative rotations are optimized. 
+This program is written to do the final high precision correlation to the MMM maps. It is hard-coded to work with the relative rotations and image sizes of our specific microscope. This program will not work well on data from other scopes unless relative rotations are optimized. If you are using Krios1 at NIH, the low mag calibrations are (as I type this) very off. So, if the MMM and LMM images combine in a very bad way, that is a likely reason. You will need to open up images in imageJ and calculate the relative pixel sizes yourself. The default values are what I currently use on that scope.
